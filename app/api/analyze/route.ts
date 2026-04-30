@@ -13,14 +13,16 @@ ${contract.slice(0, 6000)}
 Return exactly:
 {"riskScore":<0-100>,"summary":"<2-3 sentences>","redFlags":[{"clause":"<name>","reason":"<why risky>","severity":"high|medium|low"}],"suggestions":[{"clause":"<name>","suggestion":"<tip>"}],"keyTerms":[{"term":"<label>","value":"<value>"}]}`;
 
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "HTTP-Referer": "https://contractiqg.vercel.app",
+        "X-Title": "ContractIQ",
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "meta-llama/llama-3.3-70b-instruct:free",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.3,
       }),
