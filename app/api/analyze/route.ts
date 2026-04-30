@@ -10,46 +10,30 @@ export async function POST(req: NextRequest) {
 Contract:
 ${contract.slice(0, 6000)}
 
-Return exactly:
+Return exactly this JSON:
 {"riskScore":<0-100>,"summary":"<2-3 sentences>","redFlags":[{"clause":"<name>","reason":"<why risky>","severity":"high|medium|low"}],"suggestions":[{"clause":"<name>","suggestion":"<tip>"}],"keyTerms":[{"term":"<label>","value":"<value>"}]}`;
 
-    // Try multiple free models in order until one works
-    const models = [
-      "google/gemini-2.0-flash-exp:free",
-      "mistralai/mistral-7b-instruct:free",
-      "qwen/qwen-2.5-72b-instruct:free",
-    ];
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "HTTP-Referer": "https://contractiqg.vercel.app",
+        "X-Title": "ContractIQ",
+      },
+      body: JSON.stringify({
+        model: "openrouter/free",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.3,
+      }),
+    });
 
-    let lastError = "";
-    for (const model of models) {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "HTTP-Referer": "https://contractiqg.vercel.app",
-          "X-Title": "ContractIQ",
-        },
-        body: JSON.stringify({
-          model,
-          messages: [{ role: "user", content: prompt }],
-          temperature: 0.3,
-        }),
-      });
+    const data = await res.json();
+    if (!res.ok) return NextResponse.json({ error: JSON.stringify(data) }, { status: 500 });
 
-      const data = await res.json();
-      if (!res.ok || data.error) { lastError = JSON.stringify(data); continue; }
-
-      const text = data.choices?.[0]?.message?.content || "{}";
-      const clean = text.replace(/```json/g, "").replace(/```/g, "").trim();
-      try {
-        return NextResponse.json(JSON.parse(clean));
-      } catch {
-        lastError = "JSON parse failed"; continue;
-      }
-    }
-
-    return NextResponse.json({ error: `All models failed: ${lastError}` }, { status: 500 });
+    const text = data.choices?.[0]?.message?.content || "{}";
+    const clean = text.replace(/```json/g, "").replace(/```/g, "").trim();
+    return NextResponse.json(JSON.parse(clean));
   } catch (e: unknown) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Unknown error" }, { status: 500 });
   }
