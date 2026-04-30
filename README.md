@@ -178,7 +178,7 @@ Full Stack Developer
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://linkedin.com/in/krishaygahlaut)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=flat&logo=github)](https://github.com/krishaygahlaut)
-[![Live Demo](https://img.shields.io/badge/Live-Demo-green?style=flat)](https://contractiqg.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green?style=flat)](https://contractiqai.vercel.app)
 
 ---
 
