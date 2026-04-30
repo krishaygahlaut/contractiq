@@ -2,7 +2,7 @@
 
 > Never sign a risky contract again. Paste any legal document and get an instant risk score, red flags, and negotiation tips powered by LLaMA 3.3 70B.
 
-**🔗 Live Demo → [contractiqg.vercel.app](https://contractiqai.vercel.app)**
+**🔗 Live Demo → [contractiqai.vercel.app](https://contractiqai.vercel.app)**
 
 ![ContractIQ](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
